@@ -9,9 +9,10 @@ const pillarHeight = 10
 
 const rayLength = 50
 
+const MONSTER_COUNT = 10
 const MONSTER_RADIUS = 10
 const MONSTER_DECISION_INTERVAL = 200
-const MONSTER_CRAZY_THRESHOLD = 0.9
+const MONSTER_CRAZY_THRESHOLD = 0.7
 
 /* -------------------------------------------------------------------------- */
 /*                                   COLORS                                   */

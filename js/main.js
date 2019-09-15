@@ -1,6 +1,6 @@
 function init() {
   World.getInstance().init()
-  Monsters.init(20)
+  Monsters.init(MONSTER_COUNT)
   Monsters.randomize()
 }
 
