@@ -1,17 +1,27 @@
-const pillarGeo = new THREE.BoxBufferGeometry(pillarDim, pillarHeight, pillarDim)
-const pillarMat = new THREE.MeshLambertMaterial({ color: 0x112233 })
-
-for (let r = -divisions / 2; r < divisions / 2; r++) {
-  for (let c = -divisions / 2; c < divisions / 2; c++) {
-    const value = defaultMap[r + divisions / 2][c + divisions / 2]
-    if (value === 0) continue
-
-    const pillarMesh = new THREE.Mesh(pillarGeo, pillarMat)
-    moveToPositionOnGrid(pillarMesh, r, c)
-
-    scene.add(pillarMesh)
-  }
+function init() {
+  World.getInstance().init()
+  Monsters.init(20)
+  Monsters.randomize()
 }
 
-const gridHelper = new THREE.GridHelper(dimension, divisions)
-scene.add(gridHelper)
+function render() {
+  renderer.render(scene, camera)
+}
+
+function animate() {
+  requestAnimationFrame(animate)
+
+  controls.update() // only required if controls.enableDamping = true, or if controls.autoRotate = true
+  TWEEN.update()
+
+  monsterShaderTime.value = performance.now() / 1000
+
+  render()
+}
+
+init()
+animate()
+
+setInterval(() => {
+  Monsters.update()
+}, MONSTER_DECISION_INTERVAL)

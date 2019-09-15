@@ -21,7 +21,7 @@ const camera = new THREE.PerspectiveCamera(
   1,
   cameraFar
 )
-camera.position.set(400, 200, 0)
+camera.position.set(500, 300, 0)
 
 /* -------------------------------------------------------------------------- */
 /*                               ORBIT CONTROLS                               */
@@ -32,6 +32,8 @@ controls.dampingFactor = 0.05
 controls.screenSpacePanning = false
 controls.minDistance = 100
 controls.maxDistance = 1000
+controls.minAzimuthAngle = 0
+controls.maxAzimuthAngle = 0
 controls.maxPolarAngle = Math.PI / 2
 
 /* -------------------------------------------------------------------------- */
@@ -45,15 +47,3 @@ light2.position.set(-1, -1, -1)
 scene.add(light2)
 const light3 = new THREE.AmbientLight(0x222222)
 scene.add(light3)
-
-function render() {
-  renderer.render(scene, camera)
-}
-
-function animate() {
-  requestAnimationFrame(animate)
-  controls.update() // only required if controls.enableDamping = true, or if controls.autoRotate = true
-  render()
-}
-
-animate()
