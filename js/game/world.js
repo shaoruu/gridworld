@@ -1,6 +1,8 @@
 function WorldProto() {
-  this.grid = new Array(divisions)
-  for (let i = 0; i < divisions; i++) this.grid[i] = new Array(divisions).fill(0)
+  this.grid = new Array(DIVISIONS)
+  for (let i = 0; i < DIVISIONS; i++) this.grid[i] = new Array(DIVISIONS).fill(0)
+
+  this.pillarGroup = new THREE.Group()
 }
 
 WorldProto.prototype.init = function() {
@@ -9,56 +11,57 @@ WorldProto.prototype.init = function() {
   /* -------------------------------------------------------------------------- */
   noise.seed(Math.round(Math.random() * 10000))
 
-  for (let r = 0; r < divisions; r++)
-    for (let c = 0; c < divisions; c++)
-      this.grid[r][c] = Number(r === divisions - 1 || r === 0 || c == divisions - 1 || c === 0)
+  for (let r = 0; r < DIVISIONS; r++)
+    for (let c = 0; c < DIVISIONS; c++) {
+      if (r === DIVISIONS - 1 || r === 0 || c == DIVISIONS - 1 || c === 0)
+        this.addPillar(r - DIVISIONS / 2, c - DIVISIONS / 2)
+    }
 
-  for (let r = 1; r < divisions - 1; r++) {
-    for (let c = 1; c < divisions - 1; c++) {
-      const value = (noise.perlin2(r / 5, c / 5) + 1) / 2
-      if (value >= 0.48 && value <= 0.52) this.grid[r][c] = 1
+  for (let r = 1; r < DIVISIONS - 1; r++) {
+    for (let c = 1; c < DIVISIONS - 1; c++) {
+      const value = getSimplex(r, c)
+      if (value >= 0.5 - NOISE_RANGE / 2 && value <= 0.5 + NOISE_RANGE / 2)
+        this.addPillar(r - DIVISIONS / 2, c - DIVISIONS / 2)
     }
   }
 
-  /* -------------------------------------------------------------------------- */
-  /*                               DRAWING PILLARS                              */
-  /* -------------------------------------------------------------------------- */
-  this.pillarGroup = new THREE.Group()
-  for (let r = -divisions / 2; r < divisions / 2; r++) {
-    for (let c = -divisions / 2; c < divisions / 2; c++) {
-      const value = this.grid[r + divisions / 2][c + divisions / 2]
-      if (value === 0) continue
-
-      this.addPillar(r, c)
-    }
-  }
   scene.add(this.pillarGroup)
 }
 
 WorldProto.prototype.registerMonster = function(r, c) {
-  this.grid[r + divisions / 2][c + divisions / 2] = 0
+  this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 0
   this.removePillar(r, c)
 }
 
 WorldProto.prototype.addPillar = function(r, c) {
+  const obj = this.getInGroup(r, c)
+  if (obj) return
+
   const pillarMesh = new THREE.Mesh(pillarGeo, pillarMat)
   moveToPositionOnGrid(pillarMesh, r, c)
 
   pillarMesh.name = getPillarName(r, c)
   this.pillarGroup.add(pillarMesh)
+
+  this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 1
 }
 
 WorldProto.prototype.removePillar = function(r, c) {
-  const obj = this.pillarGroup.getObjectByName(getPillarName(r, c))
+  const obj = this.getInGroup(r, c)
   if (obj) this.pillarGroup.remove(obj)
-  console.log(r, c)
+  this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 0
 }
 
 WorldProto.prototype.getValAt = function(r, c) {
-  return this.grid[r + divisions / 2][c + divisions / 2]
+  return this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2]
 }
 
 WorldProto.prototype.update = function() {}
+
+WorldProto.prototype.getInGroup = function(r, c) {
+  const obj = this.pillarGroup.getObjectByName(getPillarName(r, c))
+  return obj
+}
 
 const World = (function() {
   let instance = null

@@ -5,8 +5,8 @@ const leavesMat = new THREE.MeshPhongMaterial({ color: 0x008800, flatShading: tr
 const trunkMat = new THREE.MeshPhongMaterial({ color: 0xac7339, flatShading: true })
 for (let i = 0; i < treeCount; i++) {
   const leavesMesh = new THREE.Mesh(leaves, leavesMat)
-  const x = Math.random() * dimension - dimension / 2
-  const z = Math.random() * dimension - dimension / 2
+  const x = Math.random() * DIMENSION - DIMENSION / 2
+  const z = Math.random() * DIMENSION - DIMENSION / 2
 
   leavesMesh.position.x = x
   leavesMesh.position.y = 20

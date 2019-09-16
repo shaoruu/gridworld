@@ -1,26 +1,30 @@
-const cameraFar = 2000
-const fogFar = 1800
+const CAMERA_FAR = 2000
+const FOG_FAR = 1800
 
-const dimension = 500
-const divisions = 16
+const DIMENSION = 500
+const DIVISIONS = 16
 
-const pillarDim = dimension / divisions
-const pillarHeight = 10
-
-const rayLength = 50
+const PILLAR_DIM = DIMENSION / DIVISIONS
+const PILLAR_HEIGHT = 10
 
 const MONSTER_COUNT = 10
 const MONSTER_RADIUS = 10
 const MONSTER_DECISION_INTERVAL = 200
 const MONSTER_CRAZY_THRESHOLD = 0.7
 
+const PERLIN_SCALE = 5
+const SIMPLEX_SCALE = 4
+const NOISE_RANGE = 0.08
+
 /* -------------------------------------------------------------------------- */
 /*                                   COLORS                                   */
 /* -------------------------------------------------------------------------- */
+const BACKGROUND_COLOR = 0xdddddd
 const MONSTER_COLOR = 0xff8080
 const MONSTER_RAY_COLOR = 0xffba92
 const MONSTER_RAY_ARROW_COLOR = 0xc6f1d6
 const PILLAR_COLOR = 0x1fab89
+const TITLE_COLOR = 0x293462
 
 const MOVE_UP = 0
 const MOVE_RIGHT = 1
@@ -29,7 +33,7 @@ const MOVE_LEFT = 3
 
 // const treeCount = 500
 
-const defaultMap = [
+const DEFAULT_MAP = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
@@ -41,7 +45,7 @@ const defaultMap = [
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1],
-  [1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1],
   [1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],

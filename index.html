@@ -12,6 +12,12 @@
       integrity="sha256-3mBEX8I0uMLF7+AUjJeTCelosuorzYpqwBMBPDTyQqY="
       crossorigin="anonymous"
     ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"
+      integrity="sha256-HJ7j+71YYw6Kcs8THwQV9lXmPOcR0eXlg7n8KRTZsyA="
+      crossorigin="anonymous"
+    ></script>
+    <script src="lib/stats.min.js"></script>
     <script src="lib/noise.js"></script>
     <script src="lib/tween.umd.js"></script>
     <script src="lib/OrbitControls.js"></script>
@@ -19,31 +25,10 @@
     <script src="lib/MTLLoader.js"></script>
 
     <link rel="stylesheet" href="css/styles.css" />
-
-    <script id="vertex-shader" type="x-shader/x-vertex">
-      uniform vec3 viewVector;
-      uniform float c;
-      uniform float p;
-      varying float intensity;
-      void main()
-      {
-          vec3 vNormal = normalize( normalMatrix * normal );
-      	vec3 vNormel = normalize( normalMatrix * viewVector );
-      	intensity = pow( c - dot(vNormal, vNormel), p );
-
-          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-      }
-    </script>
-
-    <script id="fragment-shader" type="x-shader/x-vertex">
-      uniform vec3 glowColor;
-      varying float intensity;
-      void main()
-      {
-      	vec3 glow = glowColor * intensity;
-          gl_FragColor = vec4( glow, 1.0 );
-      }
-    </script>
+    <link
+      rel="icon"
+      href="https://www.worldlandtrust.org/wp-content/uploads/2018/04/globe-icon.png"
+    />
   </head>
   <body>
     <canvas id="main-cvs"></canvas>
@@ -51,11 +36,11 @@
     <script src="js/utils/helpers.js"></script>
     <script src="js/setup/config.js"></script>
     <script src="js/setup/domElements.js"></script>
-    <script src="js/setup/domListeners.js"></script>
     <script src="js/game/basics.js"></script>
     <script src="js/game/models.js"></script>
     <script src="js/game/world.js"></script>
     <script src="js/game/monster.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/setup/domListeners.js"></script>
   </body>
 </html>

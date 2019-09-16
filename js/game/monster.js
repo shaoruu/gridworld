@@ -2,6 +2,8 @@ function MonsterProto() {
   this.r = 0
   this.c = 0
 
+  this.cache = {}
+
   this.mesh = monsterMesh.clone()
 }
 
@@ -56,7 +58,7 @@ MonsterProto.prototype.decide = function(sensed) {
     else if (isLatter || !sensed.data[3]) decision = MOVE_LEFT
   }
 
-  if (crazyFactor < MONSTER_CRAZY_THRESHOLD) {
+  if (crazyFactor < params.crazyThreshold) {
     rationallyDecide()
     if (!decision) irrationallyDecide(true)
   } else {
@@ -124,8 +126,8 @@ const Monsters = (function() {
     },
     randomize() {
       instances.forEach(m => {
-        const r = Math.floor(Math.random() * (divisions - 2) - divisions / 2 + 1)
-        const c = Math.floor(Math.random() * (divisions - 2) - divisions / 2 + 1)
+        const r = Math.floor(Math.random() * (DIVISIONS - 2) - DIVISIONS / 2 + 1)
+        const c = Math.floor(Math.random() * (DIVISIONS - 2) - DIVISIONS / 2 + 1)
 
         m.setCoords(r, c)
       })
