@@ -28,3 +28,10 @@ body {
   transform: translateX(-50%);
   margin-bottom: 10px;
 }
+
+#description span {
+  background: rgb(71, 71, 71);
+  color: #eeeeee;
+  border-radius: 5px;
+  padding: 3px;
+}
