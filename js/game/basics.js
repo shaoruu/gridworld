@@ -56,7 +56,8 @@ const stats = new Stats()
 document.body.appendChild(stats.dom)
 
 const params = {
-  crazyThreshold: 0.8
+  crazyThreshold: 0.8,
+  decisionInterval: 200
 }
 
 const gui = new dat.GUI({
@@ -64,6 +65,7 @@ const gui = new dat.GUI({
 })
 
 gui.add(params, 'crazyThreshold', 0, 1)
+gui.add(params, 'decisionInterval', 100, 500)
 
 /* -------------------------------------------------------------------------- */
 /*                                FONT LOADING                                */

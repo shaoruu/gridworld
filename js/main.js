@@ -26,6 +26,9 @@ function animate() {
 init()
 animate()
 
-setInterval(() => {
+function decisionLoop() {
   Monsters.update()
-}, MONSTER_DECISION_INTERVAL)
+  window.setTimeout(decisionLoop, params.decisionInterval)
+}
+
+decisionLoop()
