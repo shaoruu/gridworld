@@ -57,7 +57,8 @@ document.body.appendChild(stats.dom)
 
 const params = {
   crazyThreshold: 0.8,
-  decisionInterval: 200
+  decisionInterval: 200,
+  treePaintIntensity: 0.25
 }
 
 const gui = new dat.GUI({
@@ -66,6 +67,7 @@ const gui = new dat.GUI({
 
 gui.add(params, 'crazyThreshold', 0, 1)
 gui.add(params, 'decisionInterval', 100, 500)
+gui.add(params, 'treePaintIntensity', 0, 1)
 
 /* -------------------------------------------------------------------------- */
 /*                                FONT LOADING                                */

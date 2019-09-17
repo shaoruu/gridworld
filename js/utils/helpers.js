@@ -1,7 +1,7 @@
 function moveToPositionOnGrid(mesh, r, c) {
   const mappedPos = getMappedPosition(r, c)
   mesh.position.x = mappedPos.r
-  mesh.position.y = PILLAR_HEIGHT / 2
+  mesh.position.y = TREE_HEIGHT / 2
   mesh.position.z = mappedPos.c
 }
 
@@ -16,17 +16,17 @@ function tweenToRotation(mesh, rotation, delay = 200) {
 }
 
 function getMappedPosition(r, c) {
-  const rr = r * PILLAR_DIM + PILLAR_DIM / 2
-  const cc = -(c * PILLAR_DIM + PILLAR_DIM / 2)
+  const rr = r * TREE_DIM + TREE_DIM / 2
+  const cc = -(c * TREE_DIM + TREE_DIM / 2)
   return { r: rr, c: cc }
 }
 
-function getPillarName(r, c) {
+function getTreeName(r, c) {
   return `${r}::${c}`
 }
 
 function getRCRep(r, c) {
-  return getPillarName(r, c)
+  return getTreeName(r, c)
 }
 
 function getPerlin(r, c) {
@@ -48,9 +48,14 @@ function getRCFromRep(rep) {
 }
 
 function getRCFromPoint({ x, z }) {
-  const r = Math.floor(x / PILLAR_DIM)
-  const c = Math.floor(-z / PILLAR_DIM)
+  const r = Math.floor(x / TREE_DIM)
+  const c = Math.floor(-z / TREE_DIM)
   return { r, c }
+}
+
+function shouldPlant(r, c) {
+  const value = getSimplex(r, c)
+  return value >= 0.5 - NOISE_RANGE / 2 && value <= 0.5 + NOISE_RANGE / 2
 }
 
 function isWall(r, c) {

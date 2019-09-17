@@ -3,10 +3,10 @@ function WorldProto() {
   for (let i = 0; i < DIVISIONS; i++) this.grid[i] = new Array(DIVISIONS).fill(0)
 
   this.wallGroup = new THREE.Group()
-  this.pillarGroup = new THREE.Group()
+  this.treeGroup = new THREE.Group()
 }
 
-WorldProto.prototype.init = function() {
+WorldProto.prototype.init = function(isDefault = false) {
   /* -------------------------------------------------------------------------- */
   /*                             INITIALIZE PILLARS                             */
   /* -------------------------------------------------------------------------- */
@@ -19,47 +19,64 @@ WorldProto.prototype.init = function() {
 
   for (let r = -DIVISIONS / 2 + 1; r < DIVISIONS / 2 - 1; r++) {
     for (let c = -DIVISIONS / 2 + 1; c < DIVISIONS / 2 - 1; c++) {
-      const value = getSimplex(r, c)
-      if (value >= 0.5 - NOISE_RANGE / 2 && value <= 0.5 + NOISE_RANGE / 2) this.addPillar(r, c)
+      const gridVal = this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2]
+      if (gridVal === 0) this.removeTree(r, c)
+      if (isDefault ? gridVal === 1 : shouldPlant(r, c)) this.addTree(r, c)
     }
   }
 
   scene.add(this.wallGroup)
-  scene.add(this.pillarGroup)
+  scene.add(this.treeGroup)
+}
+
+WorldProto.prototype.addRandomTrees = function() {
+  for (let r = -DIVISIONS / 2 + 1; r < DIVISIONS / 2 - 1; r++) {
+    for (let c = -DIVISIONS / 2 + 1; c < DIVISIONS / 2 - 1; c++) {
+      if (Math.random() > 1 - params.treePaintIntensity) this.addTree(r, c)
+    }
+  }
+}
+
+WorldProto.prototype.removeRandomTrees = function() {
+  for (let r = -DIVISIONS / 2 + 1; r < DIVISIONS / 2 - 1; r++) {
+    for (let c = -DIVISIONS / 2 + 1; c < DIVISIONS / 2 - 1; c++) {
+      if (Math.random() > 1 - params.treePaintIntensity) this.removeTree(r, c)
+    }
+  }
 }
 
 WorldProto.prototype.registerMonster = function(r, c) {
   this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 0
-  this.removePillar(r, c)
+  this.removeTree(r, c)
 }
 
-WorldProto.prototype.addPillar = function(r, c) {
+WorldProto.prototype.addTree = function(r, c) {
   const obj = this.getInGroup(r, c)
-  if (obj) return
+  if (obj) this.removeInGroup(obj)
 
-  // const pillarMesh = new THREE.Mesh(pillarGeo, pillarMat)
-  const pillarMesh = treeMesh.clone()
-  moveToPositionOnGrid(pillarMesh, r, c)
+  // const treeMesh = new THREE.Mesh(treeGeo, treeMat)
+  const treeMesh = treeProtoMesh.clone()
+  moveToPositionOnGrid(treeMesh, r, c)
 
-  pillarMesh.name = getPillarName(r, c)
-  this.pillarGroup.add(pillarMesh)
+  treeMesh.name = getTreeName(r, c)
+  this.treeGroup.add(treeMesh)
 
   this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 1
 }
 
 WorldProto.prototype.addWall = function(r, c) {
-  const wallMesh = new THREE.Mesh(pillarGeo, wallMat)
+  const wallMesh = new THREE.Mesh(treeGeo, wallMat)
   moveToPositionOnGrid(wallMesh, r, c)
-  wallMesh.name = getPillarName(r, c)
+  wallMesh.name = getTreeName(r, c)
 
   this.wallGroup.add(wallMesh)
 
   this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 1
 }
 
-WorldProto.prototype.removePillar = function(r, c) {
+WorldProto.prototype.removeTree = function(r, c) {
   const obj = this.getInGroup(r, c)
-  if (obj) this.pillarGroup.remove(obj)
+  if (obj) this.treeGroup.remove(obj)
   this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 0
 }
 
@@ -70,8 +87,12 @@ WorldProto.prototype.getValAt = function(r, c) {
 WorldProto.prototype.update = function() {}
 
 WorldProto.prototype.getInGroup = function(r, c) {
-  const obj = this.pillarGroup.getObjectByName(getPillarName(r, c))
+  const obj = this.treeGroup.getObjectByName(getTreeName(r, c))
   return obj
+}
+
+WorldProto.prototype.removeInGroup = function(obj) {
+  this.treeGroup.remove(obj)
 }
 
 const World = (function() {

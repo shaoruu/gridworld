@@ -35,14 +35,14 @@ monsterMesh.add(monsterArrMesh)
 monsterMesh.position.y = MONSTER_RADIUS
 
 /* -------------------------------------------------------------------------- */
-/*                                   PILLARS                                  */
+/*                                   TREES                                  */
 /* -------------------------------------------------------------------------- */
-const pillarGeo = new THREE.BoxBufferGeometry(PILLAR_DIM, PILLAR_HEIGHT, PILLAR_DIM)
-const pillarMat = new THREE.MeshLambertMaterial({ color: PILLAR_COLOR })
+const treeGeo = new THREE.BoxBufferGeometry(TREE_DIM, TREE_HEIGHT, TREE_DIM)
+const treeMat = new THREE.MeshLambertMaterial({ color: TREE_COLOR })
 
 const wallMat = new THREE.MeshLambertMaterial({ color: WALL_COLOR })
 
-pillarGeo.computeFaceNormals()
+treeGeo.computeFaceNormals()
 
 /* -------------------------------------------------------------------------- */
 /*                                    GRIDS                                   */
@@ -54,7 +54,7 @@ const platformGeo = new THREE.PlaneBufferGeometry(DIMENSION, DIMENSION)
 const platformMat = new THREE.MeshBasicMaterial({ opacity: 0, transparent: true })
 const platformMesh = new THREE.Mesh(platformGeo, platformMat)
 
-platformMesh.position.y = PILLAR_HEIGHT / 4
+platformMesh.position.y = TREE_HEIGHT / 4
 platformMesh.rotation.x = -Math.PI / 2
 
 scene.add(platformMesh)
@@ -83,10 +83,10 @@ trunk.faces.forEach(f => f.color.set(TRUNK_COLOR))
 trunk.translate(0, 0, 0)
 geo.merge(trunk)
 
-const treeMesh = new THREE.Mesh(
+const treeProtoMesh = new THREE.Mesh(
   new THREE.BufferGeometry().fromGeometry(geo),
   new THREE.MeshLambertMaterial({
     vertexColors: THREE.VertexColors
   })
 )
-treeMesh.scale.set(TREE_SCALE, TREE_SCALE, TREE_SCALE)
+treeProtoMesh.scale.set(TREE_SCALE, TREE_SCALE, TREE_SCALE)

@@ -27,7 +27,14 @@ MonsterProto.prototype.sense = function() {
   for (let c = this.c + 1; c >= this.c - 1; c--) {
     for (let r = this.r - 1; r <= this.r + 1; r++) {
       if (r === this.r && c === this.c) continue
-      surroundings.push(World.getInstance().getValAt(r, c))
+      if (
+        r === DIVISIONS / 2 ||
+        c === DIVISIONS / 2 ||
+        r === -DIVISIONS / 2 - 1 ||
+        c === -DIVISIONS / 2 - 1
+      )
+        surroundings.push(1)
+      else surroundings.push(World.getInstance().getValAt(r, c))
     }
   }
 
@@ -76,19 +83,19 @@ MonsterProto.prototype.act = function(decision) {
 
   switch (decision) {
     case MOVE_UP:
-      if (this.c + 1 !== DIVISIONS / 2 - 1) this.c++
+      if (this.c + 1 < DIVISIONS / 2 - 1) this.c++
       rotation = Math.PI
       break
     case MOVE_RIGHT:
-      if (this.r + 1 !== DIVISIONS / 2 - 1) this.r++
+      if (this.r + 1 < DIVISIONS / 2 - 1) this.r++
       rotation = Math.PI / 2
       break
     case MOVE_DOWN:
-      if (this.c - 1 !== -DIVISIONS / 2 - 1) this.c--
+      if (this.c - 1 > -DIVISIONS / 2) this.c--
       rotation = 0
       break
     case MOVE_LEFT:
-      if (this.r - 1 !== -DIVISIONS / 2 - 1) this.r--
+      if (this.r - 1 > -DIVISIONS / 2) this.r--
       rotation = -Math.PI / 2
       break
   }
@@ -97,7 +104,7 @@ MonsterProto.prototype.act = function(decision) {
   tweenToRotation(this.mesh, rotation)
 
   if (!isWall(this.r, this.c)) {
-    World.getInstance().removePillar(this.r, this.c)
+    World.getInstance().removeTree(this.r, this.c)
   }
 }
 

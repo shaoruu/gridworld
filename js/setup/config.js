@@ -4,8 +4,8 @@ const FOG_FAR = 1800
 const DIMENSION = 500
 const DIVISIONS = 16
 
-const PILLAR_DIM = DIMENSION / DIVISIONS
-const PILLAR_HEIGHT = 10
+const TREE_DIM = DIMENSION / DIVISIONS
+const TREE_HEIGHT = 10
 
 const MONSTER_COUNT = 5
 const MONSTER_RADIUS = 10
@@ -25,7 +25,7 @@ const BACKGROUND_COLOR = 0xdddddd
 const MONSTER_COLOR = 0xff8080
 const MONSTER_RAY_COLOR = 0xffba92
 const MONSTER_RAY_ARROW_COLOR = 0xc6f1d6
-const PILLAR_COLOR = 0x1fab89
+const TREE_COLOR = 0x1fab89
 const WALL_COLOR = 0x434982
 const LEAVES_COLOR = 0x1fab89
 const TRUNK_COLOR = 0xac7339
@@ -52,9 +52,9 @@ const DEFAULT_MAP = [
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1],
-  [1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1],
-  [1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]

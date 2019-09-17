@@ -50,10 +50,7 @@ function onMouseDown(evt) {
         }
       }
 
-      const intersections = raycaster.intersectObjects(
-        World.getInstance().pillarGroup.children,
-        true
-      )
+      const intersections = raycaster.intersectObjects(World.getInstance().treeGroup.children, true)
       if (intersections.length === 0) return
 
       const {
@@ -61,7 +58,7 @@ function onMouseDown(evt) {
       } = intersections[0]
       const { r, c } = getRCFromRep(name)
 
-      if (!isWall(r, c)) World.getInstance().removePillar(r, c)
+      if (!isWall(r, c)) World.getInstance().removeTree(r, c)
 
       break
     }
@@ -77,7 +74,7 @@ function onMouseDown(evt) {
           const newMonster = Monsters.addInstance()
           newMonster.init()
           newMonster.setCoords(r, c)
-        } else World.getInstance().addPillar(r, c)
+        } else World.getInstance().addTree(r, c)
       }
       break
     }
@@ -85,3 +82,21 @@ function onMouseDown(evt) {
 }
 
 window.addEventListener('mousedown', onMouseDown, false)
+
+function onKeyDown(evt) {
+  evt.preventDefault()
+
+  // Z
+  if (evt.keyCode === 122) {
+    World.getInstance().grid = JSON.parse(JSON.stringify(DEFAULT_MAP))
+    World.getInstance().init(true)
+  } else if (evt.keyCode === 113) {
+    //Q
+    World.getInstance().addRandomTrees()
+  } else if (evt.keyCode === 97) {
+    //A
+    World.getInstance().removeRandomTrees()
+  }
+}
+
+window.addEventListener('keypress', onKeyDown, false)
