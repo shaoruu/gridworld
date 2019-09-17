@@ -1,10 +1,10 @@
-function MonsterProto(index) {
+function MonsterProto() {
   this.r = 0
   this.c = 0
 
   this.cache = {}
 
-  this.name = `monster-${index}`
+  this.name = `monster-${Math.random()}`
   this.mesh = monsterMesh.clone()
   this.mesh.name = this.name
 }
@@ -136,9 +136,9 @@ const Monsters = (function() {
       return meshes
     },
     addInstance() {
-      const newInstance = new MonsterProto(instances.size)
+      const newInstance = new MonsterProto()
 
-      instances.set(newInstance.mesh.name, newInstance)
+      instances.set(newInstance.name, newInstance)
 
       return newInstance
     },
