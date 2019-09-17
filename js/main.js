@@ -11,7 +11,7 @@ function render() {
 function animate() {
   stats.begin()
 
-  controls.update() // only required if controls.enableDamping = true, or if controls.autoRotate = true
+  if (controls.enabled) controls.update() // only required if controls.enableDamping = true, or if controls.autoRotate = true
   TWEEN.update()
 
   monsterShaderTime.value = performance.now() / 1000

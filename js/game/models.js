@@ -21,11 +21,7 @@ monsterMaterial.onBeforeCompile = shader => {
   shader.vertexShader = shader.vertexShader.replace(token, customTransform)
 }
 
-const monsterArrGeo = new THREE.ConeBufferGeometry(
-  MONSTER_RADIUS / 4,
-  MONSTER_RADIUS / 2,
-  32
-)
+const monsterArrGeo = new THREE.ConeBufferGeometry(MONSTER_RADIUS / 4, MONSTER_RADIUS / 2, 32)
 const monsterArrMat = new THREE.MeshLambertMaterial({ color: MONSTER_RAY_ARROW_COLOR })
 const monsterArrMesh = new THREE.Mesh(monsterArrGeo, monsterArrMat)
 

@@ -1,10 +1,12 @@
-function MonsterProto() {
+function MonsterProto(index) {
   this.r = 0
   this.c = 0
 
   this.cache = {}
 
+  this.name = `monster-${index}`
   this.mesh = monsterMesh.clone()
+  this.mesh.name = this.name
 }
 
 MonsterProto.prototype.init = function() {
@@ -74,19 +76,19 @@ MonsterProto.prototype.act = function(decision) {
 
   switch (decision) {
     case MOVE_UP:
-      this.c++
+      if (this.c + 1 !== DIVISIONS / 2 - 1) this.c++
       rotation = Math.PI
       break
     case MOVE_RIGHT:
-      this.r++
+      if (this.r + 1 !== DIVISIONS / 2 - 1) this.r++
       rotation = Math.PI / 2
       break
     case MOVE_DOWN:
-      this.c--
+      if (this.c - 1 !== -DIVISIONS / 2 - 1) this.c--
       rotation = 0
       break
     case MOVE_LEFT:
-      this.r--
+      if (this.r - 1 !== -DIVISIONS / 2 - 1) this.r--
       rotation = -Math.PI / 2
       break
   }
@@ -99,6 +101,10 @@ MonsterProto.prototype.act = function(decision) {
   }
 }
 
+MonsterProto.prototype.update = function() {
+  this.act(this.decide(this.sense()))
+}
+
 MonsterProto.prototype.setCoords = function(r, c) {
   this.r = r
   this.c = c
@@ -107,23 +113,30 @@ MonsterProto.prototype.setCoords = function(r, c) {
   World.getInstance().registerMonster(r, c)
 }
 
-MonsterProto.prototype.update = function() {
-  this.act(this.decide(this.sense()))
-}
-
 const Monsters = (function() {
-  let instances = []
+  let instances = new Map()
 
   return {
     getInstances() {
       return instances
     },
+    getInstanceByName(name) {
+      return instances.get(name)
+    },
+    getMeshes() {
+      const meshes = []
+      instances.forEach(monster => meshes.push(monster.mesh))
+      return meshes
+    },
     addInstance() {
-      const newInstance = new MonsterProto()
+      const newInstance = new MonsterProto(instances.size)
 
-      instances.push(newInstance)
+      instances.set(newInstance.mesh.name, newInstance)
 
       return newInstance
+    },
+    removeInstance(name) {
+      instances.delete(name)
     },
     init(count) {
       for (let i = 0; i < count; i++) this.addInstance().init()

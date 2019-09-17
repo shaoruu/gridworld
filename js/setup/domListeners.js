@@ -22,15 +22,34 @@ document.addEventListener('mousemove', onMouseMove, false)
 function onMouseDown(evt) {
   evt.preventDefault()
 
-  const { button } = evt
+  const { button, shiftKey } = evt
 
   camera.lookAt(scene.position)
   raycaster.setFromCamera(mouse, camera)
 
-  let row, column
-
   switch (button) {
     case LEFT_CLICK: {
+      if (shiftKey) {
+        const monsterInc = raycaster.intersectObjects(Monsters.getMeshes(), true)
+
+        if (monsterInc.length > 0) {
+          const {
+            object: {
+              parent: { name }
+            }
+          } = monsterInc[0]
+          const monsterInstance = Monsters.getInstanceByName(name)
+
+          Monsters.removeInstance(name)
+          tweenToPositionOnGrid(monsterInstance.mesh, 0, 0, 300).onComplete(() => {
+            const obj = scene.getObjectByName(name)
+            if (obj) scene.remove(obj)
+          })
+
+          return
+        }
+      }
+
       const intersections = raycaster.intersectObjects(
         World.getInstance().pillarGroup.children,
         true
@@ -53,7 +72,13 @@ function onMouseDown(evt) {
       const { point } = intersections[0]
       const { r, c } = getRCFromPoint(point)
 
-      if (!isWall(r, c)) World.getInstance().addPillar(r, c)
+      if (!isWall(r, c)) {
+        if (shiftKey) {
+          const newMonster = Monsters.addInstance()
+          newMonster.init()
+          newMonster.setCoords(r, c)
+        } else World.getInstance().addPillar(r, c)
+      }
       break
     }
   }

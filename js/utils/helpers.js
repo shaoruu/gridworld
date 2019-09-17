@@ -8,7 +8,7 @@ function moveToPositionOnGrid(mesh, r, c) {
 function tweenToPositionOnGrid(mesh, r, c, delay = 200) {
   const mappedPos = getMappedPosition(r, c)
 
-  new TWEEN.Tween(mesh.position).to({ x: mappedPos.r, z: mappedPos.c }, delay).start()
+  return new TWEEN.Tween(mesh.position).to({ x: mappedPos.r, z: mappedPos.c }, delay).start()
 }
 
 function tweenToRotation(mesh, rotation, delay = 200) {
@@ -57,7 +57,7 @@ function isWall(r, c) {
   return (
     r === DIVISIONS / 2 - 1 ||
     r === -DIVISIONS / 2 ||
-    c == DIVISIONS / 2 - 1 ||
+    c === DIVISIONS / 2 - 1 ||
     c === -DIVISIONS / 2
   )
 }
