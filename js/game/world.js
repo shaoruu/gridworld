@@ -2,7 +2,8 @@ function WorldProto() {
   this.grid = new Array(DIVISIONS)
   for (let i = 0; i < DIVISIONS; i++) this.grid[i] = new Array(DIVISIONS).fill(0)
 
-  this.meshGroup = new THREE.Group()
+  this.wallGroup = new THREE.Group()
+  this.pillarGroup = new THREE.Group()
 }
 
 WorldProto.prototype.init = function() {
@@ -19,12 +20,12 @@ WorldProto.prototype.init = function() {
   for (let r = -DIVISIONS / 2 + 1; r < DIVISIONS / 2 - 1; r++) {
     for (let c = -DIVISIONS / 2 + 1; c < DIVISIONS / 2 - 1; c++) {
       const value = getSimplex(r, c)
-      if (value >= 0.5 - NOISE_RANGE / 2 && value <= 0.5 + NOISE_RANGE / 2)
-        this.addPillar(r, c)
+      if (value >= 0.5 - NOISE_RANGE / 2 && value <= 0.5 + NOISE_RANGE / 2) this.addPillar(r, c)
     }
   }
 
-  scene.add(this.meshGroup)
+  scene.add(this.wallGroup)
+  scene.add(this.pillarGroup)
 }
 
 WorldProto.prototype.registerMonster = function(r, c) {
@@ -41,7 +42,7 @@ WorldProto.prototype.addPillar = function(r, c) {
   moveToPositionOnGrid(pillarMesh, r, c)
 
   pillarMesh.name = getPillarName(r, c)
-  this.meshGroup.add(pillarMesh)
+  this.pillarGroup.add(pillarMesh)
 
   this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 1
 }
@@ -51,14 +52,14 @@ WorldProto.prototype.addWall = function(r, c) {
   moveToPositionOnGrid(wallMesh, r, c)
   wallMesh.name = getPillarName(r, c)
 
-  this.meshGroup.add(wallMesh)
+  this.wallGroup.add(wallMesh)
 
   this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 1
 }
 
 WorldProto.prototype.removePillar = function(r, c) {
   const obj = this.getInGroup(r, c)
-  if (obj) this.meshGroup.remove(obj)
+  if (obj) this.pillarGroup.remove(obj)
   this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2] = 0
 }
 
@@ -69,7 +70,7 @@ WorldProto.prototype.getValAt = function(r, c) {
 WorldProto.prototype.update = function() {}
 
 WorldProto.prototype.getInGroup = function(r, c) {
-  const obj = this.meshGroup.getObjectByName(getPillarName(r, c))
+  const obj = this.pillarGroup.getObjectByName(getPillarName(r, c))
   return obj
 }
 

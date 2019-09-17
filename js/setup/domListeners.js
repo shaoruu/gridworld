@@ -22,23 +22,39 @@ document.addEventListener('mousemove', onMouseMove, false)
 function onMouseDown(evt) {
   evt.preventDefault()
 
+  const { button } = evt
+
   camera.lookAt(scene.position)
   raycaster.setFromCamera(mouse, camera)
 
-  const intersections = raycaster.intersectObject(platformMesh)
-  if (intersections.length === 0) return
+  let row, column
 
-  const { point } = intersections[0]
-  const { r, c } = getRCFromPoint(point)
+  switch (button) {
+    case LEFT_CLICK: {
+      const intersections = raycaster.intersectObjects(
+        World.getInstance().pillarGroup.children,
+        true
+      )
+      if (intersections.length === 0) return
 
-  if (!isWall(r, c)) {
-    switch (evt.button) {
-      case LEFT_CLICK:
-        World.getInstance().removePillar(r, c)
-        break
-      case RIGHT_CLICK:
-        World.getInstance().addPillar(r, c)
-        break
+      const {
+        object: { name }
+      } = intersections[0]
+      const { r, c } = getRCFromRep(name)
+
+      if (!isWall(r, c)) World.getInstance().removePillar(r, c)
+
+      break
+    }
+    case RIGHT_CLICK: {
+      const intersections = raycaster.intersectObject(platformMesh)
+      if (intersections.length === 0) return
+
+      const { point } = intersections[0]
+      const { r, c } = getRCFromPoint(point)
+
+      if (!isWall(r, c)) World.getInstance().addPillar(r, c)
+      break
     }
   }
 }
