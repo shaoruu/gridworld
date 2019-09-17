@@ -28,6 +28,7 @@ camera.position.set(500, 300, 0)
 /* -------------------------------------------------------------------------- */
 const controls = new THREE.OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true // an animation loop is required when either damping or auto-rotation are enabled
+controls.enablePan = false
 controls.dampingFactor = 0.05
 controls.screenSpacePanning = false
 controls.minDistance = 100

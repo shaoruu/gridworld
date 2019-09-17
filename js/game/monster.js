@@ -93,6 +93,10 @@ MonsterProto.prototype.act = function(decision) {
 
   tweenToPositionOnGrid(this.mesh, this.r, this.c)
   tweenToRotation(this.mesh, rotation)
+
+  if (!isWall(this.r, this.c)) {
+    World.getInstance().removePillar(this.r, this.c)
+  }
 }
 
 MonsterProto.prototype.setCoords = function(r, c) {

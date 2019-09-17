@@ -19,27 +19,9 @@ function onMouseMove(event) {
 
 document.addEventListener('mousemove', onMouseMove, false)
 
-// function onMouseClick(evt) {
-//   evt.preventDefault()
+function onMouseDown(evt) {
+  evt.preventDefault()
 
-//   camera.lookAt(scene.position)
-//   raycaster.setFromCamera(mouse, camera)
-
-//   const intersections = raycaster.intersectObjects(
-//     World.getInstance().pillarGroup.children,
-//     true
-//   )
-//   const { object } = intersections.length > 0 ? intersections[0] : {}
-
-//   if (!object) return
-
-//   const { r, c } = getRCFromRep(object.name)
-//   console.log(r, c)
-
-//   World.getInstance().removePillar(r, c)
-// }
-
-function onMouseClick(button) {
   camera.lookAt(scene.position)
   raycaster.setFromCamera(mouse, camera)
 
@@ -50,7 +32,7 @@ function onMouseClick(button) {
   const { r, c } = getRCFromPoint(point)
 
   if (!isWall(r, c)) {
-    switch (button) {
+    switch (evt.button) {
       case LEFT_CLICK:
         World.getInstance().removePillar(r, c)
         break
@@ -61,19 +43,4 @@ function onMouseClick(button) {
   }
 }
 
-window.addEventListener(
-  'click',
-  e => {
-    e.preventDefault()
-    onMouseClick(LEFT_CLICK)
-  },
-  false
-)
-window.addEventListener(
-  'contextmenu',
-  e => {
-    e.preventDefault()
-    onMouseClick(RIGHT_CLICK)
-  },
-  false
-)
+window.addEventListener('mousedown', onMouseDown, false)

@@ -62,3 +62,35 @@ platformMesh.position.y = PILLAR_HEIGHT / 4
 platformMesh.rotation.x = -Math.PI / 2
 
 scene.add(platformMesh)
+
+/* -------------------------------------------------------------------------- */
+/*                                    TREES                                   */
+/* -------------------------------------------------------------------------- */
+const geo = new THREE.Geometry()
+const level1 = new THREE.ConeGeometry(1.5, 2, 8)
+level1.faces.forEach(f => f.color.set(LEAVES_COLOR))
+level1.translate(0, 4, 0)
+geo.merge(level1)
+
+const level2 = new THREE.ConeGeometry(2, 2, 8)
+level2.faces.forEach(f => f.color.set(LEAVES_COLOR))
+level2.translate(0, 3, 0)
+geo.merge(level2)
+
+const level3 = new THREE.ConeGeometry(3, 2, 8)
+level3.faces.forEach(f => f.color.set(LEAVES_COLOR))
+level3.translate(0, 2, 0)
+geo.merge(level3)
+
+const trunk = new THREE.CylinderGeometry(0.5, 0.5, 2)
+trunk.faces.forEach(f => f.color.set(TRUNK_COLOR))
+trunk.translate(0, 0, 0)
+geo.merge(trunk)
+
+const treeMesh = new THREE.Mesh(
+  new THREE.BufferGeometry().fromGeometry(geo),
+  new THREE.MeshLambertMaterial({
+    vertexColors: THREE.VertexColors
+  })
+)
+treeMesh.scale.set(TREE_SCALE, TREE_SCALE, TREE_SCALE)

@@ -36,7 +36,8 @@ WorldProto.prototype.addPillar = function(r, c) {
   const obj = this.getInGroup(r, c)
   if (obj) return
 
-  const pillarMesh = new THREE.Mesh(pillarGeo, pillarMat)
+  // const pillarMesh = new THREE.Mesh(pillarGeo, pillarMat)
+  const pillarMesh = treeMesh.clone()
   moveToPositionOnGrid(pillarMesh, r, c)
 
   pillarMesh.name = getPillarName(r, c)
