@@ -44,6 +44,8 @@ monsterMesh.position.y = MONSTER_RADIUS
 const pillarGeo = new THREE.BoxBufferGeometry(PILLAR_DIM, PILLAR_HEIGHT, PILLAR_DIM)
 const pillarMat = new THREE.MeshLambertMaterial({ color: PILLAR_COLOR })
 
+const wallMat = new THREE.MeshLambertMaterial({ color: WALL_COLOR })
+
 pillarGeo.computeFaceNormals()
 
 /* -------------------------------------------------------------------------- */
@@ -51,3 +53,12 @@ pillarGeo.computeFaceNormals()
 /* -------------------------------------------------------------------------- */
 const gridHelper = new THREE.GridHelper(DIMENSION, DIVISIONS)
 scene.add(gridHelper)
+
+const platformGeo = new THREE.PlaneBufferGeometry(DIMENSION, DIMENSION)
+const platformMat = new THREE.MeshBasicMaterial({ opacity: 0, transparent: true })
+const platformMesh = new THREE.Mesh(platformGeo, platformMat)
+
+platformMesh.position.y = PILLAR_HEIGHT / 4
+platformMesh.rotation.x = -Math.PI / 2
+
+scene.add(platformMesh)

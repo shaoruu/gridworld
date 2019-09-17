@@ -19,23 +19,61 @@ function onMouseMove(event) {
 
 document.addEventListener('mousemove', onMouseMove, false)
 
-function onMouseClick(evt) {
-  evt.preventDefault()
+// function onMouseClick(evt) {
+//   evt.preventDefault()
 
+//   camera.lookAt(scene.position)
+//   raycaster.setFromCamera(mouse, camera)
+
+//   const intersections = raycaster.intersectObjects(
+//     World.getInstance().pillarGroup.children,
+//     true
+//   )
+//   const { object } = intersections.length > 0 ? intersections[0] : {}
+
+//   if (!object) return
+
+//   const { r, c } = getRCFromRep(object.name)
+//   console.log(r, c)
+
+//   World.getInstance().removePillar(r, c)
+// }
+
+function onMouseClick(button) {
   camera.lookAt(scene.position)
   raycaster.setFromCamera(mouse, camera)
 
-  const intersections = raycaster.intersectObjects(
-    World.getInstance().pillarGroup.children,
-    true
-  )
-  const { object } = intersections.length > 0 ? intersections[0] : {}
+  const intersections = raycaster.intersectObject(platformMesh)
+  if (intersections.length === 0) return
 
-  if (!object) return
+  const { point } = intersections[0]
+  const { r, c } = getRCFromPoint(point)
 
-  const { r, c } = getRCFromRep(object.name)
-
-  World.getInstance().removePillar(r, c)
+  if (!isWall(r, c)) {
+    switch (button) {
+      case LEFT_CLICK:
+        World.getInstance().removePillar(r, c)
+        break
+      case RIGHT_CLICK:
+        World.getInstance().addPillar(r, c)
+        break
+    }
+  }
 }
 
-window.addEventListener('click', onMouseClick, false)
+window.addEventListener(
+  'click',
+  e => {
+    e.preventDefault()
+    onMouseClick(LEFT_CLICK)
+  },
+  false
+)
+window.addEventListener(
+  'contextmenu',
+  e => {
+    e.preventDefault()
+    onMouseClick(RIGHT_CLICK)
+  },
+  false
+)

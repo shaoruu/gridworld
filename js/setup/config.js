@@ -24,12 +24,15 @@ const MONSTER_COLOR = 0xff8080
 const MONSTER_RAY_COLOR = 0xffba92
 const MONSTER_RAY_ARROW_COLOR = 0xc6f1d6
 const PILLAR_COLOR = 0x1fab89
-const TITLE_COLOR = 0x293462
+const WALL_COLOR = 0x8b4367
 
 const MOVE_UP = 0
 const MOVE_RIGHT = 1
 const MOVE_DOWN = 2
 const MOVE_LEFT = 3
+
+const LEFT_CLICK = 0
+const RIGHT_CLICK = 2
 
 // const treeCount = 500
 

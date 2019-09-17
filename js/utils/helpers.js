@@ -46,3 +46,18 @@ function getRCFromRep(rep) {
   const rc = rep.split('::').map(ele => parseInt(ele))
   return { r: rc[0], c: rc[1] }
 }
+
+function getRCFromPoint({ x, z }) {
+  const r = Math.floor(x / PILLAR_DIM)
+  const c = Math.floor(-z / PILLAR_DIM)
+  return { r, c }
+}
+
+function isWall(r, c) {
+  return (
+    r === DIVISIONS / 2 - 1 ||
+    r === -DIVISIONS / 2 ||
+    c == DIVISIONS / 2 - 1 ||
+    c === -DIVISIONS / 2
+  )
+}
