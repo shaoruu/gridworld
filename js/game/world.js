@@ -6,7 +6,10 @@ function WorldProto() {
   this.treeGroup = new THREE.Group()
 }
 
-WorldProto.prototype.init = function(isDefault = false) {
+WorldProto.prototype.init = function(gridworld) {
+  this.gridworld = gridworld
+  this.initModels()
+
   /* -------------------------------------------------------------------------- */
   /*                             INITIALIZE PILLARS                             */
   /* -------------------------------------------------------------------------- */
@@ -21,18 +24,74 @@ WorldProto.prototype.init = function(isDefault = false) {
     for (let c = -DIVISIONS / 2 + 1; c < DIVISIONS / 2 - 1; c++) {
       const gridVal = this.grid[r + DIVISIONS / 2][c + DIVISIONS / 2]
       if (gridVal === 0) this.removeTree(r, c)
-      if (isDefault ? gridVal === 1 : shouldPlant(r, c)) this.addTree(r, c)
+      if (shouldPlant(r, c)) this.addTree(r, c)
     }
   }
 
-  scene.add(this.wallGroup)
-  scene.add(this.treeGroup)
+  this.gridworld.scene.add(this.wallGroup)
+  this.gridworld.scene.add(this.treeGroup)
+}
+
+WorldProto.prototype.initModels = function() {
+  /* -------------------------------------------------------------------------- */
+  /*                                  PLATFORM                                  */
+  /* -------------------------------------------------------------------------- */
+  const gridHelper = new THREE.GridHelper(DIMENSION, DIVISIONS)
+  this.gridworld.scene.add(gridHelper)
+
+  const platformGeo = new THREE.PlaneBufferGeometry(DIMENSION, DIMENSION)
+  const platformMat = new THREE.MeshBasicMaterial({ opacity: 0, transparent: true })
+  this.platformMesh = new THREE.Mesh(platformGeo, platformMat)
+
+  this.platformMesh.position.y = TREE_HEIGHT / 4
+  this.platformMesh.rotation.x = -Math.PI / 2
+
+  this.gridworld.scene.add(this.platformMesh)
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    TREES                                   */
+  /* -------------------------------------------------------------------------- */
+  const geo = new THREE.Geometry()
+  const level1 = new THREE.ConeGeometry(1.5, 2, 8)
+  level1.faces.forEach(f => f.color.set(LEAVES_COLOR))
+  level1.translate(0, 4, 0)
+  geo.merge(level1)
+
+  const level2 = new THREE.ConeGeometry(2, 2, 8)
+  level2.faces.forEach(f => f.color.set(LEAVES_COLOR))
+  level2.translate(0, 3, 0)
+  geo.merge(level2)
+
+  const level3 = new THREE.ConeGeometry(3, 2, 8)
+  level3.faces.forEach(f => f.color.set(LEAVES_COLOR))
+  level3.translate(0, 2, 0)
+  geo.merge(level3)
+
+  const trunk = new THREE.CylinderGeometry(0.5, 0.5, 2)
+  trunk.faces.forEach(f => f.color.set(TRUNK_COLOR))
+  trunk.translate(0, 0, 0)
+  geo.merge(trunk)
+
+  this.treeProtoMesh = new THREE.Mesh(
+    new THREE.BufferGeometry().fromGeometry(geo),
+    new THREE.MeshLambertMaterial({
+      vertexColors: THREE.VertexColors
+    })
+  )
+  this.treeProtoMesh.scale.set(TREE_SCALE, TREE_SCALE, TREE_SCALE)
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    WALLS                                   */
+  /* -------------------------------------------------------------------------- */
+  const wallGeo = new THREE.BoxBufferGeometry(TREE_DIM, TREE_HEIGHT, TREE_DIM)
+  const wallMat = new THREE.MeshLambertMaterial({ color: WALL_COLOR })
+  this.wallProtoMesh = new THREE.Mesh(wallGeo, wallMat)
 }
 
 WorldProto.prototype.addRandomTrees = function() {
   for (let r = -DIVISIONS / 2 + 1; r < DIVISIONS / 2 - 1; r++) {
     for (let c = -DIVISIONS / 2 + 1; c < DIVISIONS / 2 - 1; c++) {
-      if (Math.random() > 1 - params.treePaintIntensity) this.addTree(r, c)
+      if (Math.random() > 1 - this.gridworld.params.treePaintIntensity) this.addTree(r, c)
     }
   }
 }
@@ -40,7 +99,7 @@ WorldProto.prototype.addRandomTrees = function() {
 WorldProto.prototype.removeRandomTrees = function() {
   for (let r = -DIVISIONS / 2 + 1; r < DIVISIONS / 2 - 1; r++) {
     for (let c = -DIVISIONS / 2 + 1; c < DIVISIONS / 2 - 1; c++) {
-      if (Math.random() > 1 - params.treePaintIntensity) this.removeTree(r, c)
+      if (Math.random() > 1 - this.gridworld.params.treePaintIntensity) this.removeTree(r, c)
     }
   }
 }
@@ -55,7 +114,7 @@ WorldProto.prototype.addTree = function(r, c) {
   if (obj) this.removeInGroup(obj)
 
   // const treeMesh = new THREE.Mesh(treeGeo, treeMat)
-  const treeMesh = treeProtoMesh.clone()
+  const treeMesh = this.treeProtoMesh.clone()
   moveToPositionOnGrid(treeMesh, r, c)
 
   treeMesh.name = getTreeName(r, c)
@@ -65,7 +124,7 @@ WorldProto.prototype.addTree = function(r, c) {
 }
 
 WorldProto.prototype.addWall = function(r, c) {
-  const wallMesh = new THREE.Mesh(treeGeo, wallMat)
+  const wallMesh = this.wallProtoMesh.clone()
   moveToPositionOnGrid(wallMesh, r, c)
   wallMesh.name = getTreeName(r, c)
 
