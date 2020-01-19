@@ -7,10 +7,10 @@ class GridWorld {
 
   init = () => {
     this.scene = new THREE.Scene()
-    this.scene.background = new THREE.Color(BACKGROUND_COLOR)
-    this.scene.fog = new THREE.Fog(BACKGROUND_COLOR, 1, FOG_FAR)
+    // this.scene.background = new THREE.Color(BACKGROUND_DAY_COLOR)
+    this.scene.fog = new THREE.Fog(BACKGROUND_DAY_COLOR, 1, FOG_FAR)
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, canvas })
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas })
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(canvas.offsetWidth, canvas.offsetHeight, false)
 
@@ -36,9 +36,6 @@ class GridWorld {
     this.light1 = new THREE.DirectionalLight(0xffffff)
     this.light1.position.set(1, 1, 1)
     this.scene.add(this.light1)
-    this.light2 = new THREE.DirectionalLight(0x002288)
-    this.light2.position.set(-1, -1, -1)
-    this.scene.add(this.light2)
     this.light3 = new THREE.AmbientLight(0x222222)
     this.scene.add(this.light3)
 
@@ -64,6 +61,7 @@ class GridWorld {
     Monsters.randomize()
 
     this.initListeners()
+    this.setupNight()
   }
 
   render = () => {
@@ -187,9 +185,39 @@ class GridWorld {
       } else if (evt.keyCode === 97) {
         //A
         World.getInstance().removeRandomTrees()
+      } else if (evt.keyCode === 110) {
+        // N
+        scope.setupNight()
+      } else if (evt.keyCode === 100) {
+        scope.setupDay()
       }
     }
 
     window.addEventListener('keypress', onKeyDown, false)
+
+    toggle.addEventListener(
+      'change',
+      () => {
+        if (toggle.checked) this.setupNight()
+        else this.setupDay()
+      },
+      false
+    )
+  }
+
+  setupNight = () => {
+    canvas.style.backgroundColor = BACKGROUND_NIGHT_COLOR
+    this.scene.fog.near = 0.1
+    this.scene.fog.far = 0
+    description.style.color = 'grey'
+    toggle.checked = true
+  }
+
+  setupDay = () => {
+    canvas.style.backgroundColor = BACKGROUND_DAY_COLOR
+    this.scene.fog.near = 1
+    this.scene.fog.far = FOG_FAR
+    description.style.color = 'black'
+    toggle.checked = false
   }
 }

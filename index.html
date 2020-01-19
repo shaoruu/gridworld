@@ -26,14 +26,62 @@
     <link rel="icon" href="https://image.flaticon.com/icons/png/512/223/223203.png" />
   </head>
   <body>
+    <script type="x-shader/x-vertex" id="vertexShader">
+
+      varying vec3 vWorldPosition;
+
+      void main() {
+
+      	vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+      	vWorldPosition = worldPosition.xyz;
+
+      	gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+      }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragmentShader">
+
+      uniform vec3 topColor;
+      uniform vec3 bottomColor;
+      uniform float offset;
+      uniform float exponent;
+
+      varying vec3 vWorldPosition;
+
+      void main() {
+
+      	float h = normalize( vWorldPosition + offset ).y;
+      	gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
+
+      }
+    </script>
+
     <canvas id="main-cvs"></canvas>
 
     <div id="description">
       <span>left click</span> to remove trees; <span>right click</span> to plant trees;
       <span>shift + left click</span>
       to kill monster; <span>shift + right click</span> to spawn monster; <span>Q</span> to add
-      random trees; <span>A</span>
-      to remove random trees
+      random trees; <span>A</span> to remove random trees; <span>D</span> to set day mode;
+      <span>N</span> to set night mode
+    </div>
+
+    <div class="toggleWrapper">
+      <input type="checkbox" class="dn" id="dn" />
+      <label for="dn" class="toggle">
+        <span class="toggle__handler">
+          <span class="crater crater--1"></span>
+          <span class="crater crater--2"></span>
+          <span class="crater crater--3"></span>
+        </span>
+        <span class="star star--1"></span>
+        <span class="star star--2"></span>
+        <span class="star star--3"></span>
+        <span class="star star--4"></span>
+        <span class="star star--5"></span>
+        <span class="star star--6"></span>
+      </label>
     </div>
 
     <script src="js/utils/helpers.js"></script>

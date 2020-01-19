@@ -40,7 +40,7 @@ WorldProto.prototype.initModels = function() {
   this.gridworld.scene.add(gridHelper)
 
   const platformGeo = new THREE.PlaneBufferGeometry(DIMENSION, DIMENSION)
-  const platformMat = new THREE.MeshBasicMaterial({ opacity: 0, transparent: true })
+  const platformMat = new THREE.MeshLambertMaterial({ opacity: 0, transparent: true })
   this.platformMesh = new THREE.Mesh(platformGeo, platformMat)
 
   this.platformMesh.position.y = TREE_HEIGHT / 4
