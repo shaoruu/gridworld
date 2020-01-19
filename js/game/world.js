@@ -36,17 +36,26 @@ WorldProto.prototype.initModels = function() {
   /* -------------------------------------------------------------------------- */
   /*                                  PLATFORM                                  */
   /* -------------------------------------------------------------------------- */
-  const gridHelper = new THREE.GridHelper(DIMENSION, DIVISIONS)
-  this.gridworld.scene.add(gridHelper)
+  // const gridHelper = new THREE.GridHelper(DIMENSION, DIVISIONS)
+  // this.gridworld.scene.add(gridHelper)
 
   const platformGeo = new THREE.PlaneBufferGeometry(DIMENSION, DIMENSION)
-  const platformMat = new THREE.MeshLambertMaterial({ opacity: 0, transparent: true })
+  const platformMat = new THREE.MeshLambertMaterial({
+    color: PLATFORM_COLOR,
+    opacity: 0.5,
+    transparent: true
+  })
   this.platformMesh = new THREE.Mesh(platformGeo, platformMat)
 
-  this.platformMesh.position.y = TREE_HEIGHT / 4
+  // this.platformMesh.position.y = TREE_HEIGHT / 4
   this.platformMesh.rotation.x = -Math.PI / 2
+  this.fakePlatformMesh = this.platformMesh.clone()
+  this.fakePlatformMesh.position.y = TREE_HEIGHT / 4
+  this.fakePlatformMesh.material = this.fakePlatformMesh.material.clone()
+  this.fakePlatformMesh.material.opacity = 0
 
   this.gridworld.scene.add(this.platformMesh)
+  this.gridworld.scene.add(this.fakePlatformMesh)
 
   /* -------------------------------------------------------------------------- */
   /*                                    TREES                                   */

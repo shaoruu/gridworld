@@ -21,9 +21,8 @@ MonsterProto.prototype.initModels = function() {
   const monsterMaterial = new THREE.MeshLambertMaterial({ color: MONSTER_COLOR })
   const monster = new THREE.Mesh(monsterGeo, monsterMaterial)
 
-  const monsterShaderTime = { value: 0 }
   monsterMaterial.onBeforeCompile = shader => {
-    shader.uniforms.time = monsterShaderTime
+    shader.uniforms.time = this.gridworld.monsterShaderTime
     shader.vertexShader =
       `
          uniform float time;

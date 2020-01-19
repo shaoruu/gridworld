@@ -23,6 +23,7 @@ const NOISE_RANGE = 0.08
 /* -------------------------------------------------------------------------- */
 const BACKGROUND_DAY_COLOR = '#dddddd'
 const BACKGROUND_NIGHT_COLOR = '#000000'
+const PLATFORM_COLOR = 0x9aceff
 const MONSTER_COLOR = 0xff8080
 const MONSTER_RAY_COLOR = 0xffba92
 const MONSTER_RAY_ARROW_COLOR = 0xc6f1d6

@@ -38,6 +38,8 @@ class GridWorld {
     this.scene.add(this.light1)
     this.light3 = new THREE.AmbientLight(0x222222)
     this.scene.add(this.light3)
+    this.light4 = new THREE.AmbientLight(0xffe484, 0.2)
+    this.scene.add(this.light4)
 
     this.stats = new Stats()
     document.body.appendChild(this.stats.dom)
@@ -56,6 +58,8 @@ class GridWorld {
     this.gui.add(this.params, 'decisionInterval', 100, 500)
     this.gui.add(this.params, 'treePaintIntensity', 0, 1)
 
+    this.monsterShaderTime = { value: 0 }
+
     World.getInstance().init(this)
     Monsters.init(this, MONSTER_COUNT)
     Monsters.randomize()
@@ -73,7 +77,7 @@ class GridWorld {
 
     if (this.controls.enabled) this.controls.update()
     TWEEN.update()
-
+    this.monsterShaderTime.value = performance.now() / 1000
     this.render()
 
     this.stats.end()
@@ -156,7 +160,7 @@ class GridWorld {
           break
         }
         case RIGHT_CLICK: {
-          const intersections = raycaster.intersectObject(World.getInstance().platformMesh)
+          const intersections = raycaster.intersectObject(World.getInstance().fakePlatformMesh)
           if (intersections.length === 0) return
 
           const { point } = intersections[0]
