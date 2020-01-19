@@ -57,6 +57,7 @@ class GridWorld {
     this.gui.add(this.params, 'crazyThreshold', 0, 1)
     this.gui.add(this.params, 'decisionInterval', 100, 500)
     this.gui.add(this.params, 'treePaintIntensity', 0, 1)
+    this.gui.closed = true
 
     this.monsterShaderTime = { value: 0 }
 
@@ -168,7 +169,7 @@ class GridWorld {
 
           if (!isWall(r, c)) {
             if (shiftKey) {
-              const newMonster = Monsters.addInstance()
+              const newMonster = Monsters.addInstance(scope)
               newMonster.init(scope)
               newMonster.setCoords(r, c)
             } else World.getInstance().addTree(r, c)
@@ -221,6 +222,9 @@ class GridWorld {
     description.style.color = 'grey'
     toggle.checked = true
 
+    this.day = false
+    this.night = true
+
     this.lastTimeNight = performance.now()
   }
 
@@ -234,6 +238,9 @@ class GridWorld {
     this.scene.fog.far = FOG_FAR
     description.style.color = 'black'
     toggle.checked = false
+
+    this.day = true
+    this.night = false
 
     this.lastTimeDay = performance.now()
   }

@@ -1,4 +1,6 @@
-function MonsterProto() {
+function MonsterProto(gridworld) {
+  this.gridworld = gridworld
+
   this.r = 0
   this.c = 0
 
@@ -11,14 +13,15 @@ function MonsterProto() {
   this.mesh.name = this.name
 }
 
-MonsterProto.prototype.init = function(gridworld) {
-  this.gridworld = gridworld
+MonsterProto.prototype.init = function() {
   this.gridworld.scene.add(this.mesh)
 }
 
 MonsterProto.prototype.initModels = function() {
   const monsterGeo = new THREE.IcosahedronBufferGeometry(MONSTER_RADIUS)
-  const monsterMaterial = new THREE.MeshLambertMaterial({ color: MONSTER_COLOR })
+  const monsterMaterial = new THREE.MeshLambertMaterial({
+    color: this.gridworld.day ? MONSTER_DAY_COLOR : MONSTER_NIGHT_COLOR
+  })
   const monster = new THREE.Mesh(monsterGeo, monsterMaterial)
 
   monsterMaterial.onBeforeCompile = shader => {
@@ -49,6 +52,7 @@ MonsterProto.prototype.initModels = function() {
   monsterMesh.add(monsterArrMesh)
   monsterMesh.position.y = MONSTER_RADIUS
 
+  this.monsterMat = monsterMaterial
   this.monsterMesh = monsterMesh
 }
 
@@ -174,8 +178,8 @@ const Monsters = (function() {
       instances.forEach(monster => meshes.push(monster.mesh))
       return meshes
     },
-    addInstance() {
-      const newInstance = new MonsterProto()
+    addInstance(gridworld) {
+      const newInstance = new MonsterProto(gridworld)
 
       instances.set(newInstance.name, newInstance)
 
@@ -185,7 +189,7 @@ const Monsters = (function() {
       instances.delete(name)
     },
     init(gridworld, count) {
-      for (let i = 0; i < count; i++) this.addInstance().init(gridworld)
+      for (let i = 0; i < count; i++) this.addInstance(gridworld).init()
     },
     randomize() {
       instances.forEach(m => {
