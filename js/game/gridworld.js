@@ -210,18 +210,31 @@ class GridWorld {
   }
 
   setupNight = () => {
+    if (this.lastTimeNight && performance.now() - this.lastTimeNight < 500) return
+
     canvas.style.backgroundColor = BACKGROUND_NIGHT_COLOR
+    canvas.style.backgroundImage =
+      'url(http://www.wallpaperback.net/wp-content/uploads/2018/06/Wallpaper%20night%20sky,%20night%20city,%20earth,%20sky,%20stars,%20clouds,%20light,%20height,%20moon,%20Space%203507713515.jpg)'
+    // canvas.style.background = 'repeat top center'
     this.scene.fog.near = 0.1
     this.scene.fog.far = 0
     description.style.color = 'grey'
     toggle.checked = true
+
+    this.lastTimeNight = performance.now()
   }
 
   setupDay = () => {
+    if (this.lastTimeDay && performance.now() - this.lastTimeDay < 500) return
+
     canvas.style.backgroundColor = BACKGROUND_DAY_COLOR
+    canvas.style.backgroundImage =
+      'url(https://www.shell.com/energy-and-innovation/the-energy-future/scenarios/shell-scenario-sky/_jcr_content/pagePromo/image.img.960.jpeg/1548184031017/clear-blue-sky.jpeg)'
     this.scene.fog.near = 1
     this.scene.fog.far = FOG_FAR
     description.style.color = 'black'
     toggle.checked = false
+
+    this.lastTimeDay = performance.now()
   }
 }

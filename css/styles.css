@@ -20,6 +20,9 @@ body {
   height: 100%;
   background-color: #dddddd;
   transition: all 0.5s ease;
+  background-image: url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top
+    center;
+  background-size: cover;
 }
 
 #description {
