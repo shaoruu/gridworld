@@ -1,1 +1,9 @@
-class Implementor {}
+class Implementor {
+  setBackground = () => {}
+
+  setDescriptionColor = () => {}
+
+  setFog = () => {}
+
+  setToggle = () => {}
+}
