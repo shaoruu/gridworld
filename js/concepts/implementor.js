@@ -6,4 +6,6 @@ class Implementor {
   setFog = () => {}
 
   setToggle = () => {}
+
+  setMonsterColor = () => {}
 }

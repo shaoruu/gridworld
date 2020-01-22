@@ -19,4 +19,8 @@ class Night extends Implementor {
   }
 
   setToggle = () => (toggle.checked = true)
+
+  setMonsterColor = () => {
+    Monsters.setColor(MONSTER_NIGHT_COLOR)
+  }
 }

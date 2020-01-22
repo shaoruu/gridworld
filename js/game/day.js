@@ -19,4 +19,8 @@ class Day extends Implementor {
   }
 
   setToggle = () => (toggle.checked = false)
+
+  setMonsterColor = () => {
+    Monsters.setColor(MONSTER_DAY_COLOR)
+  }
 }

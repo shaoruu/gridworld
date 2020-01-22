@@ -61,11 +61,10 @@ class GridWorld {
 
     this.monsterShaderTime = { value: 0 }
 
+    this.abstraction = new Time(this)
     World.getInstance().init(this)
     Monsters.init(this, MONSTER_COUNT)
     Monsters.randomize()
-
-    this.abstraction = new Time(this)
 
     this.initListeners()
   }

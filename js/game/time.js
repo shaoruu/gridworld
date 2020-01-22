@@ -28,5 +28,6 @@ class Time extends Abstraction {
     this.implementor.setDescriptionColor()
     this.implementor.setFog(this.gridworld)
     this.implementor.setToggle()
+    this.implementor.setMonsterColor()
   }
 }

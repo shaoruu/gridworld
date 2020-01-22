@@ -1,4 +1,4 @@
-function MonsterProto(gridworld) {
+function MonsterProto(gridworld, color) {
   this.gridworld = gridworld
 
   this.r = 0
@@ -6,7 +6,7 @@ function MonsterProto(gridworld) {
 
   this.cache = {}
 
-  this.initModels()
+  this.initModels(color)
 
   this.name = `monster-${Math.random()}`
   this.mesh = this.monsterMesh.clone()
@@ -17,10 +17,14 @@ MonsterProto.prototype.init = function() {
   this.gridworld.scene.add(this.mesh)
 }
 
-MonsterProto.prototype.initModels = function() {
-  const monsterGeo = new THREE.IcosahedronBufferGeometry(MONSTER_RADIUS)
+MonsterProto.prototype.initModels = function(color) {
+  const monsterGeo = new THREE.CylinderBufferGeometry(
+    MONSTER_RADIUS,
+    MONSTER_RADIUS,
+    MONSTER_RADIUS
+  )
   const monsterMaterial = new THREE.MeshLambertMaterial({
-    color: this.gridworld.day ? MONSTER_DAY_COLOR : MONSTER_NIGHT_COLOR
+    color
   })
   const monster = new THREE.Mesh(monsterGeo, monsterMaterial)
 
@@ -34,7 +38,7 @@ MonsterProto.prototype.initModels = function() {
     const customTransform = `
         vec3 transformed = vec3(position);
         transformed.x = position.x 
-             + cos(position.y*10.0 + time*10.0) * 5.0;
+             + cos(position.y*10.0 + time*10.0) * 1.0;
     `
     shader.vertexShader = shader.vertexShader.replace(token, customTransform)
   }
@@ -50,7 +54,7 @@ MonsterProto.prototype.initModels = function() {
 
   monsterMesh.add(monster)
   monsterMesh.add(monsterArrMesh)
-  monsterMesh.position.y = MONSTER_RADIUS
+  monsterMesh.position.y = MONSTER_RADIUS / 2
 
   this.monsterMat = monsterMaterial
   this.monsterMesh = monsterMesh
@@ -165,6 +169,7 @@ MonsterProto.prototype.setCoords = function(r, c) {
 
 const Monsters = (function() {
   let instances = new Map()
+  let color = ''
 
   return {
     getInstances() {
@@ -179,11 +184,14 @@ const Monsters = (function() {
       return meshes
     },
     addInstance(gridworld) {
-      const newInstance = new MonsterProto(gridworld)
+      const newInstance = new MonsterProto(gridworld, color)
 
       instances.set(newInstance.name, newInstance)
 
       return newInstance
+    },
+    setColor(c) {
+      color = c
     },
     removeInstance(name) {
       instances.delete(name)
