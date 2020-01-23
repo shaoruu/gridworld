@@ -5,7 +5,7 @@ class Night extends Implementor {
 
   setBackground = () => {
     const img = new Image()
-    img.src = 'assets/night.png'
+    img.src = 'assets/night.jpg'
     img.onload = () => (canvas.style.backgroundImage = `url(${img.src})`)
   }
 
@@ -22,5 +22,9 @@ class Night extends Implementor {
 
   setMonsterColor = () => {
     Monsters.setColor(MONSTER_NIGHT_COLOR)
+  }
+
+  setTreeColor = () => {
+    treeMat.color.set(TREE_COLOR)
   }
 }

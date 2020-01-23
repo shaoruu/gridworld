@@ -161,7 +161,9 @@ class GridWorld {
           break
         }
         case RIGHT_CLICK: {
-          const intersections = raycaster.intersectObject(World.getInstance().fakePlatformMesh)
+          const intersections = raycaster.intersectObject(
+            World.getInstance().fakePlatformMesh
+          )
           if (intersections.length === 0) return
 
           const { point } = intersections[0]
@@ -195,6 +197,8 @@ class GridWorld {
         scope.abstraction.setToNight()
       } else if (evt.keyCode === 100) {
         scope.abstraction.setToDay()
+      } else if (evt.keyCode === 104) {
+        scope.abstraction.setToHell()
       }
     }
 

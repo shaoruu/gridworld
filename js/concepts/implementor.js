@@ -8,4 +8,6 @@ class Implementor {
   setToggle = () => {}
 
   setMonsterColor = () => {}
+
+  setTreeColor = () => {}
 }

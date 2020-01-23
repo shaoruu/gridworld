@@ -6,7 +6,8 @@ class Time extends Abstraction {
 
     this.implementors = {
       day: new Day(),
-      night: new Night()
+      night: new Night(),
+      hell: new Hell()
     }
 
     this.setImplementor(this.implementors.day)
@@ -23,11 +24,22 @@ class Time extends Abstraction {
     this.updateImplementor()
   }
 
+  setToHell = () => {
+    this.setImplementor(this.implementors.hell)
+    this.updateImplementor()
+  }
+
+  setToNormal = () => {
+    this.setImplementor(this.implementors.day)
+    this.updateImplementor()
+  }
+
   updateImplementor = () => {
     this.implementor.setBackground()
     this.implementor.setDescriptionColor()
     this.implementor.setFog(this.gridworld)
     this.implementor.setToggle()
     this.implementor.setMonsterColor()
+    this.implementor.setTreeColor()
   }
 }

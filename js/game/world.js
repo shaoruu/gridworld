@@ -1,3 +1,7 @@
+const treeMat = new THREE.MeshLambertMaterial({
+  vertexColors: THREE.VertexColors
+})
+
 function WorldProto() {
   this.grid = new Array(DIVISIONS)
   for (let i = 0; i < DIVISIONS; i++) this.grid[i] = new Array(DIVISIONS).fill(0)
@@ -83,9 +87,7 @@ WorldProto.prototype.initModels = function() {
 
   this.treeProtoMesh = new THREE.Mesh(
     new THREE.BufferGeometry().fromGeometry(geo),
-    new THREE.MeshLambertMaterial({
-      vertexColors: THREE.VertexColors
-    })
+    treeMat
   )
   this.treeProtoMesh.scale.set(TREE_SCALE, TREE_SCALE, TREE_SCALE)
 
